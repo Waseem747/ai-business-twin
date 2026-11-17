@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-twin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-twin}
+      POSTGRES_DB: ${POSTGRES_DB:-business_twin}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/init-pgvector.sql:/docker-entrypoint-initdb.d/10-pgvector.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-twin} -d ${POSTGRES_DB:-business_twin}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-twin}:${POSTGRES_PASSWORD:-twin}@postgres:5432/${POSTGRES_DB:-business_twin}
+      CHECKPOINT_DB: /data/checkpoints.sqlite
+      STORAGE_DIR: /data/storage
+      DEMO_MODE: ${DEMO_MODE:-true}
+      DEMO_AUTO_BOOTSTRAP: ${DEMO_AUTO_BOOTSTRAP:-true}
+      SCHEDULER_ENABLED: ${SCHEDULER_ENABLED:-true}
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000}
+      TIMEZONE: ${TIMEZONE:-UTC}
+    volumes:
+      - twin_data:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:
+  twin_data:

@@ -1,0 +1,102 @@
+"""Canonical status/severity enums shared by services, workflows and API."""
+from __future__ import annotations
+
+from enum import StrEnum
+
+
+class DataCategory(StrEnum):
+    ACTUAL = "ACTUAL"
+    CALCULATED = "CALCULATED"
+    AI_INTERPRETATION = "AI_INTERPRETATION"
+    PROPOSED_DECISION = "PROPOSED_DECISION"
+    SIMULATED = "SIMULATED"
+    EXECUTED_ACTION = "EXECUTED_ACTION"
+
+
+class RuleStatus(StrEnum):
+    DRAFT = "DRAFT"
+    TESTING = "TESTING"
+    APPROVED = "APPROVED"
+    ACTIVE = "ACTIVE"
+    RETIRED = "RETIRED"
+
+
+class WorkflowStatus(StrEnum):
+    RUNNING = "RUNNING"
+    WAITING_APPROVAL = "WAITING_APPROVAL"
+    WAITING_HUMAN_REVIEW = "WAITING_HUMAN_REVIEW"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+
+
+class DecisionStatus(StrEnum):
+    DRAFT = "DRAFT"
+    AUDITED = "AUDITED"
+    AWAITING_APPROVAL = "AWAITING_APPROVAL"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    EXECUTING = "EXECUTING"
+    EXECUTED = "EXECUTED"
+    VERIFIED = "VERIFIED"
+    FAILED = "FAILED"
+
+
+class AuditVerdict(StrEnum):
+    APPROVED = "APPROVED"
+    APPROVED_WITH_CONDITIONS = "APPROVED_WITH_CONDITIONS"
+    REJECTED = "REJECTED"
+    REQUIRES_HUMAN_REVIEW = "REQUIRES_HUMAN_REVIEW"
+
+
+class ApprovalStatus(StrEnum):
+    PENDING = "PENDING"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    EXPIRED = "EXPIRED"
+
+
+class ActionStatus(StrEnum):
+    PENDING = "PENDING"
+    EXECUTING = "EXECUTING"
+    EXECUTED = "EXECUTED"
+    FAILED = "FAILED"
+    VERIFIED = "VERIFIED"
+    PARTIALLY_VERIFIED = "PARTIALLY_VERIFIED"
+    SKIPPED = "SKIPPED"
+
+
+class AlertSeverity(StrEnum):
+    INFO = "INFO"
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+
+class AlertStatus(StrEnum):
+    OPEN = "OPEN"
+    ACKNOWLEDGED = "ACKNOWLEDGED"
+    RESOLVED = "RESOLVED"
+
+
+class ReportType(StrEnum):
+    DAILY_SUMMARY = "DAILY_SUMMARY"
+    EXCEPTION = "EXCEPTION"
+    DECISION = "DECISION"
+    SIMULATION = "SIMULATION"
+    CONVERSION = "CONVERSION"
+
+
+class AgentStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    IDLE = "IDLE"
+    DEGRADED = "DEGRADED"
+    DISABLED = "DISABLED"
+
+
+class SimulationStatus(StrEnum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
